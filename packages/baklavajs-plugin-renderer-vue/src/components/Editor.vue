@@ -270,18 +270,26 @@ export default class EditorView extends Vue {
         } else if (ev.key === "Tab") {
             ev.preventDefault();
         } else if (ev.key === "Control") {
-            this.ctrlPressed = true;
+            this.controlPressed = true;
+        } else if (ev.key === "MetaLeft" || ev.key === "MetaRight") {
+            this.metaPressed = true;
         } else if (ev.key === "z" && ev.ctrlKey) {
             this.history.undo();
         } else if (ev.key === "y" && ev.ctrlKey) {
             this.history.redo();
         }
+        // Add support for MacOS where Ctrl+Click brings up the context menu.
+        this.ctrlPressed = this.metaPressed || this.controlPressed;
     }
 
     keyUp(ev: KeyboardEvent) {
         if (ev.key === "Control") {
             this.ctrlPressed = false;
+        } else if (ev.key === "MetaLeft" || ev.key === "MetaRight") {
+            this.metaPressed = false;
         }
+        // Add support for MacOS where Ctrl+Click brings up the context menu.
+        this.ctrlPressed = this.metaPressed || this.controlPressed;
     }
 
     selectNode(node: IViewNode) {
